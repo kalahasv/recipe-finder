@@ -2,14 +2,18 @@ import random
 
 items=['planks', 'planks', 'planks', 'planks', 'planks', 'planks', 'book', 'book', 'book']
 
-rewards_map = {'pumpkin': -5, 'egg': -25, 'sugar': -10,
-               'pumpkin_pie': 100, 'pumpkin_seeds': -50}
+rewards_map = { 'book': 5, 'planks': 5, 'bookshelf': 100, "crafting table": -5, 'stick': -5, 'bowl': -5, 'wood stairs': -5, 'wooden button': -5, 'chest': -5 }
 
-food_recipes = {'pumpkin_pie': ['pumpkin', 'egg', 'sugar'],
-                'pumpkin_seeds': ['pumpkin']}
+food_recipes = {'bookshelf': ['planks','planks','planks','book','book','book', 'planks','planks','planks',], 
+                'stick': ['planks', 'planks'], 
+                'chest': ['planks','planks','planks','planks','planks','planks','planks','planks'],
+                'bowl': ['planks','planks','planks'], 
+                'crafting table': ['planks','planks','planks','planks'],
+                'wood stairs': ['planks','planks','planks','planks','planks','planks',],
+                'wooden button': ['planks']}
 
 def is_solution(reward):
-    return reward == 0
+    return reward == 100
 
 def get_curr_state(items):
     item_keys = []
