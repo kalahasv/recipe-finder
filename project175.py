@@ -137,12 +137,12 @@ class Odie(object):
         self.epsilon = 0.2  # chance of taking a random action instead of the best
         self.q_table = {}
         self.n, self.alpha, self.gamma = n, alpha, gamma
-        self.inventory = {'planks': 6, 'book': 3}
-        self.num_items_in_inv = 9
+        self.inventory = {'planks': 64, 'paper': 64, 'leather': 64}
+        self.num_items_in_inv = 192
 
     def clear_inventory(self):
-        self.inventory = {'planks': 6, 'book': 3}
-        self.num_items_in_inv = 9
+        self.inventory = {'planks': 64, 'paper': 64, 'leather': 64}
+        self.num_items_in_inv = 192
        
 
     def get_crafting_options(self):
@@ -192,6 +192,15 @@ class Odie(object):
         if len(craft_opt) > 0:
             action_list.extend(['c_%s' % craft_item for craft_item in craft_opt])
         
+        if len(action_list) == 0:
+            self.clear_inventory()
+            action_list = []
+
+            craft_opt = self.get_crafting_options()
+            if len(craft_opt) > 0:
+                action_list.extend(['c_%s' % craft_item for craft_item in craft_opt])
+            return action_list
+        
         return action_list
 
     def get_curr_state(self):
@@ -240,7 +249,8 @@ class Odie(object):
     def run(self, agent_host):
         done_update = False
         while not done_update:
-            odie.clear_inventory()
+            if odie.num_items_in_inv > 1500:
+                odie.clear_inventory()
             s0 = self.get_curr_state()
             possible_actions = self.get_possible_actions(agent_host, True)
             a0 = self.choose_action(s0, possible_actions, self.epsilon)
@@ -280,9 +290,8 @@ if __name__ == '__main__':
     n=1
     odie = Odie(n=n)
     print("n=",n)
-    odie.clear_inventory()
+
     for iRepeat in range(num_reps):
-        odie.clear_inventory()
         my_mission = MalmoPython.MissionSpec(GetMissionXML("Fetch boy #" + str(iRepeat)), True)
         my_mission_record = MalmoPython.MissionRecordSpec()  # Records nothing by default
         my_mission.requestVideo(800, 500)
